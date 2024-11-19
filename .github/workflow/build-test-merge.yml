@@ -1,0 +1,57 @@
+name: Build, Test and Merge Go Code
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Config Go
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.23
+
+      # Install dependencies
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Build project
+      - name: Build project
+        run: go build -v ./...
+
+      # Run tests
+      - name: Run tests
+        run: go test -v ./...
+
+  merge:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      # Checkout code again
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Merge pull request
+      - name: Merge pull request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { context, github } = require("@actions/github");
+            const prNumber = context.payload.pull_request.number;
+            await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              merge_method: "merge",
+            });
