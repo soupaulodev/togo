@@ -1,4 +1,4 @@
-name: Build, Test and Merge Go Code
+name: Build, Test, and Merge Go Code
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.23
+          go-version: 1.20 # Ajuste para a versão correta do Go
 
       # Install dependencies
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
   merge:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: success()
+    if: github.event_name == 'pull_request' && success()
 
     steps:
       # Checkout code again
@@ -48,6 +48,9 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            if (!context.payload.pull_request) {
+              throw new Error("Este workflow só pode ser usado em pull requests.");
+            }
             const prNumber = context.payload.pull_request.number;
             await github.rest.pulls.merge({
               owner: context.repo.owner,
