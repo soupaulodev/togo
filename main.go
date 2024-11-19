@@ -42,6 +42,10 @@ func main() {
 			fmt.Print("Priority (1-5): ")
 			reader.Scan()
 			priorityInt, _ := strconv.Atoi(reader.Text())
+			if priorityInt < 1 || priorityInt > 5 {
+				fmt.Println("Invalid priority. Please use a number between 1 and 5")
+				continue
+			}
 			priority := uint8(priorityInt)
 			
 			fmt.Print("Due Date (DD/MM/YYYY HH:MM): ")
