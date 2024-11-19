@@ -26,8 +26,9 @@ func main() {
 
 		reader.Scan()
 		choice := reader.Text()
-		fmt.Print("\033[H\033[2J")
 
+		fmt.Print("\033[H\033[2J")
+		
 		switch choice {
 		case "1":
 			fmt.Print("Title: ")
