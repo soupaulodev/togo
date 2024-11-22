@@ -10,6 +10,7 @@ import (
 	"github.com/aquasecurity/table"
 )
 
+// Represents a single task
 type Todo struct {
 	Title	   	string
 	Completed	bool
@@ -17,8 +18,10 @@ type Todo struct {
 	CompletedAt	*time.Time
 }
 
+// Represents a list of tasks
 type Todos []Todo
 
+// Add a new task to the list
 func (tds *Todos) add(title string) {
 	todo := Todo{
 		Title: title,
@@ -30,15 +33,17 @@ func (tds *Todos) add(title string) {
 	*tds = append(*tds, todo)
 }
 
+// Validate the index of a task
 func (tds *Todos) validateIndex(index int) error {
 	if index < 0 || index >= len(*tds) {
-		err := errors.New("Invalid index")
+		err := errors.New("invalid index")
 		fmt.Println(err)
 		return err
 	}
 	return nil
 }
 
+// Delete a task from the list
 func (tds *Todos) delete(index int) error {
 	t := *tds
 
@@ -50,6 +55,7 @@ func (tds *Todos) delete(index int) error {
 	return nil
 }
 
+// Toggle the completion status of a task
 func (tds *Todos) toggle(index int) error {
 	t := *tds
 
@@ -67,6 +73,7 @@ func (tds *Todos) toggle(index int) error {
 	return nil
 }
 
+// Edit the title of a task
 func (tds *Todos) edit(index int, title string) error {
 	t := *tds
 
@@ -78,6 +85,7 @@ func (tds *Todos) edit(index int, title string) error {
 	return nil
 }
 
+// Print all tasks in a table
 func (tds *Todos) print() {
 	table := table.New(os.Stdout)
 	table.SetRowLines(false)
