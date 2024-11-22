@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// Represents command line flags
 type cmdFlags struct {
 	Add string
 	Del int
@@ -16,6 +17,7 @@ type cmdFlags struct {
 	List bool
 }
 
+// NewCmdFlags creates a new cmdFlags instance
 func NewCmdFlags() *cmdFlags {
 	cf := cmdFlags{}
 	flag.StringVar(&cf.Add, "add", "", "Add a new todo specify title")
@@ -28,6 +30,7 @@ func NewCmdFlags() *cmdFlags {
 	return &cf
 }
 
+// Execute the command based on the flags
 func (cf *cmdFlags) Execute(tds *Todos) {
 	switch {
 	case cf.List:
